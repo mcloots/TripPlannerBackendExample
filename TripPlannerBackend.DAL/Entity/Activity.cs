@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace TripPlannerBackend.DAL.Entity
 {
-    public class Trip
+    public class Activity
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
-        public ICollection<Activity> Activities { get; set; }
+        public int TripId { get; set; }
+        public Trip Trip { get; set; }
     }
 }
