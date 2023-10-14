@@ -8,10 +8,13 @@ namespace TripPlannerBackend.API.Mapper
     {
         public AutoMapper()
         {
-            CreateMap<TripDto, Trip>();
-            CreateMap<Trip, TripDto>();
-            CreateMap<Activity, ActivityDto>();
-            CreateMap<ActivityDto, Activity>();
+            CreateMap<GetTripDto, Trip>();
+            CreateMap<CreateTripDto, Trip>();
+            CreateMap<Trip, GetTripDto>();
+                //.ForMember(dest => dest.Name, act => act.MapFrom(src => src.TripName));
+            CreateMap<Activity, GetActivityDto>();
+            CreateMap<GetActivityDto, Activity>();
+            CreateMap<CreateActivityDto, Activity>();
         }
     }
 }

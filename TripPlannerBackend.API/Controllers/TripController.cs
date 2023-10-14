@@ -25,9 +25,9 @@ namespace TripPlannerBackend.API.Controllers
 
         //Get By ID
         [HttpGet("{id}")]
-        [Authorize]
+        //[Authorize]
         //[Authorize(Policy = "TripReadAccess")]
-        public async Task<ActionResult<TripDto>> GetTrip(int id)
+        public async Task<ActionResult<GetTripDto>> GetTrip(int id)
         {
             var trip = await _context.Trips.Include(t => t.Activities).SingleAsync(t => t.Id == id);
 
@@ -36,21 +36,37 @@ namespace TripPlannerBackend.API.Controllers
                 return NotFound();
             }
 
-            return _mapper.Map<TripDto>(trip);
+            return _mapper.Map<GetTripDto>(trip);
         }
 
+        //Get Search
+        [HttpGet]
+        //[Authorize]
+        //[Authorize(Policy = "TripReadAccess")]
+        public ActionResult<List<GetTripDto>> SearchTrip([FromQuery]SearchTripDto searchDto)
+        {
+            var trips = _context.Trips.Include(t => t.Activities).Where(t => 
+            t.Name.ToLower().Contains(searchDto.Name.ToLower()));
+
+            if (trips == null)
+            {
+                return NotFound();
+            }
+
+            return _mapper.Map<List<GetTripDto>>(trips);
+        }
 
         //Insert - you have to be authenticated
         [HttpPost]
         //[Authorize]
         //[Authorize(Policy = "TripWriteAccess")]
-        public async Task<ActionResult<TripDto>> PostTrip(TripDto trip)
+        public async Task<ActionResult<GetTripDto>> AddTrip(CreateTripDto trip)
         {
-            //We map the AddTripDto to the Trip entity object
+            //We map the CreateTripDto to the Trip entity object
             Trip tripToAdd = _mapper.Map<Trip>(trip);
             _context.Trips.Add(tripToAdd);
             await _context.SaveChangesAsync();
-            TripDto tripToReturn = _mapper.Map<TripDto>(tripToAdd);
+            GetTripDto tripToReturn = _mapper.Map<GetTripDto>(tripToAdd);
 
             return CreatedAtAction(nameof(GetTrip), new { id = tripToReturn.Id }, tripToReturn);
         }
