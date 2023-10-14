@@ -39,11 +39,12 @@ namespace TripPlannerBackend.API.Controllers
             return _mapper.Map<TripDto>(trip);
         }
 
+
         //Insert - you have to be authenticated
         [HttpPost]
         //[Authorize]
         //[Authorize(Policy = "TripWriteAccess")]
-        public async Task<ActionResult<TripDto>> PostTodoItem(TripDto trip)
+        public async Task<ActionResult<TripDto>> PostTrip(TripDto trip)
         {
             //We map the AddTripDto to the Trip entity object
             Trip tripToAdd = _mapper.Map<Trip>(trip);
