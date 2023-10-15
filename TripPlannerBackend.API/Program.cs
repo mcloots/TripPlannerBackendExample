@@ -27,6 +27,13 @@ builder.Services.AddSwaggerService();
 
 var app = builder.Build();
 
+app.UseCors(options =>
+{
+    options.AllowAnyHeader();
+    options.AllowAnyMethod();
+    options.AllowAnyOrigin();
+});
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

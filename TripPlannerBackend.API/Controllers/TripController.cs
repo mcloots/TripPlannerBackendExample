@@ -39,11 +39,27 @@ namespace TripPlannerBackend.API.Controllers
             return _mapper.Map<GetTripDto>(trip);
         }
 
-        //Get Search
+        // Get ALL
         [HttpGet]
         //[Authorize]
         //[Authorize(Policy = "TripReadAccess")]
-        public ActionResult<List<GetTripDto>> SearchTrip([FromQuery]SearchTripDto searchDto)
+        public async Task<ActionResult<List<GetTripDto>>> GetTrips()
+        {
+            var trips = await _context.Trips.Include(t => t.Activities).ToListAsync();
+
+            if (trips == null)
+            {
+                return NotFound();
+            }
+
+            return _mapper.Map<List<GetTripDto>>(trips);
+        }
+
+        //Get Search
+        [HttpGet("search")]
+        //[Authorize]
+        //[Authorize(Policy = "TripReadAccess")]
+        public ActionResult<List<GetTripDto>> SearchTrips([FromQuery]SearchTripDto searchDto)
         {
             var trips = _context.Trips.Include(t => t.Activities).Where(t => 
             t.Name.ToLower().Contains(searchDto.Name.ToLower()));
